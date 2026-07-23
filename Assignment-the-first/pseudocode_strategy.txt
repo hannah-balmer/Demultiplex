@@ -41,7 +41,7 @@ def read_record(rec: (newline-delimited) str) -> list:
     Input: "@Header:1:5\nACTGT\n+\nEEECC\n"
     Output: [@Header:1:5, ACTGT, +, EEECC]
 
-def make_fasta_files(base file name: str, barcodes: list) -> list:
+def make_fastq_files(base file name: str, barcodes: list) -> list:
     '''Accepts a string for the base file name and a list of barcode strings to return a list strings of FASTQ file names:
     2 FASTQ files for each barcode (one for each read): f"{base file name}.{barcode}.read1.fq" and f"{base file name}.{barcode}.read2.fq"
     2 FASTQ files for non-matching index-pairs: f"{base file name}.index_hop.read1.fq" and f"{base file name}.index_hop.read2.fq"
@@ -59,12 +59,12 @@ def avg_qc(qual: str) -> float:
     Outut: 35.2
 
 
-Initialize variables for total records, # of reads with dual matches, # of reads with index hopping, # of reads with unknown indexes
+Initialize variables for total reads, # of reads with dual matches, # of reads with index hopping, # of reads with unknown indexes
 
 Open text file with indexes and append to list with all barcodes
 Pass list to make_fasta_files()
 
-Open all fasta files per naming list generated from make_fasta_files() using for loop to iterate through list:
+Create/open all fastq output files per naming list generated from make_fastq_files() using for loop to iterate through list:
 
     Open all four read files:
         
@@ -80,7 +80,7 @@ Open all fasta files per naming list generated from make_fasta_files() using for
 
             Create local variable to hold the reverse complement of the index of read 2 (hereby referred to as R2 index)
 
-            if either R1, R2 indexes not present in barcode list or contain an 'N' or are below avg quality threshold:
+            if either R1, R2 indexes are not present in barcode list or contain an 'N' or are below avg quality threshold:
                 Increase counter of # of unknown index occurrences by 1 (append index seqs to end of header separated by -)
                 Write FASTQ records from R1 and R2 to index unknown FASTQ files        
             
@@ -92,7 +92,7 @@ Open all fasta files per naming list generated from make_fasta_files() using for
                     Increase counter of # of index hopping occurrences by 1
                     Write FASTQ records from R1 and R2 to two output files for index hopping (append index seqs to end of header separated by -)
 
-All output files are closed after this point
+All fastq output files are closed after this point
 
 Calculate the percent of read-pairs per category
  Number of read-pairs with properly matched indexes: # of matched indexes / total # of records
