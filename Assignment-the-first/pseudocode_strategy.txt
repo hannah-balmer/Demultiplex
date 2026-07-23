@@ -1,0 +1,119 @@
+Overall puprose of script:
+Demultiplex multiple files from an Illumina paired-read dual-match sequencing run.
+Program should output 2 FASTQ files for each barcode (1 for each paired read) for all index-matched reads, 2 FASTQ files for reads with non-matching indices (evidence of index hopping), and 2 FASTQ files for reads with unknown indices and/or indices below a certain quality threshold.
+Given that there is a total of 24 barcodes, program should output a total of 52 files: 48 for index-matched reads, 2 for index hopped reads, and 2 for unknown/low quality index reads. 
+
+The program should also output some brief statistics in a separate text file to demonstrate what percentage of reads whose indices matched, did not match, and were unidentifiable/low quality.
+
+Sequencing files this program was designed for:
+1294_S1_L008_R1_001.fastq.gz # Read 1 sequence file
+1294_S1_L008_R2_001.fastq.gz # Read 1 index file
+1294_S1_L008_R3_001.fastq.gz # Read 2 index file
+1294_S1_L008_R4_001.fastq.gz # Read 2 sequence file
+
+
+import gzip (to read zipped sequencing files)
+from bioinfo import convert_phred (to be used to calculate quality score later on)
+import argparse (to take sequencing file names and other parameters needed for program, see below)
+
+Insert argparse syntax: multiple parameters required
+    Argument for read 1 sequence file
+    Argument for read 1 index file
+    Argument for read 2 sequence file
+    Argument for read 2 index file
+    Argument for barcode text file
+    Argument for quality score threshold of index reads
+    Argument for output file names prefix
+
+
+Functions to create:
+def reverse_comp(seq: str) -> str:
+    '''Takes a string sequence of DNA, validates it as DNA (make sure to accept Ns), and
+    outputs a reverse complement string sequence''' 
+    return reverse_comp
+    Input: "ATGCNT"
+    Output: "ANGCAT"
+
+def read_record(rec: (newline-delimited) str) -> list:
+    '''Takes a FASTQ record as a string and separates each line by the newlines characters, returning 
+    a list in the order of [header, sequence, +, quality line]''' 
+    return record
+    Input: "@Header:1:5\nACTGT\n+\nEEECC\n"
+    Output: [@Header:1:5, ACTGT, +, EEECC]
+
+def make_fasta_files(base file name: str, barcodes: list) -> list:
+    '''Accepts a string for the base file name and a list of barcode strings to return a list strings of FASTQ file names:
+    2 FASTQ files for each barcode (one for each read): f"{base file name}.{barcode}.read1.fq" and f"{base file name}.{barcode}.read2.fq"
+    2 FASTQ files for non-matching index-pairs: f"{base file name}.index_hop.read1.fq" and f"{base file name}.index_hop.read2.fq"
+    2 FASTQ files for unknown index reads/low quality reads: f"{base file name}.unk_index.read1.fq" and f"{base file name}.unk_index.read2.fq"
+    '''
+    Input: "test", ["ACTT", "CTCC"]
+    Output: ["test.ACTT.read1.fq", "test.ACTT.read2.fq", "test.CTCC.read1.fq", "test.CTCC.read2.fq", "test.index_hop.read1.fq", \
+    "test.index_hop.read2.fq", "test.unk_index.read1.fq", "test.unk_index.read2.fq"]
+
+def avg_qc(qual: str) -> float:
+    '''Take string of quality scores, normalizes each score with convert_phred from bioinfo.py
+    and then returns the average score of the line as a float''' 
+    return avg_q
+    Input: "EEECC"
+    Outut: 35.2
+
+
+Initialize variables for total records, # of reads with dual matches, # of reads with index hopping, # of reads with unknown indexes
+
+Open text file with indexes and append to list with all barcodes
+Pass list to make_fasta_files()
+
+Open all fasta files per naming list generated from make_fasta_files() using for loop to iterate through list:
+
+    Open all four read files:
+        
+        While True loop:
+            If empty string returned:
+                break loop since this would indicate the end of the file is reached
+            
+            Increase counter of # of records by one
+            
+            Create four separate lists by calling read_record() 4 times for each FASTQ file
+
+            Call avg_qc() on both index seqs to calculate the average quality score and store in two separate variables
+
+            Create local variable to hold the reverse complement of the index of read 2 (hereby referred to as R2 index)
+
+            if either R1, R2 indexes not present in barcode list or contain an 'N' or are below avg quality threshold:
+                Increase counter of # of unknown index occurrences by 1 (append index seqs to end of header separated by -)
+                Write FASTQ records from R1 and R2 to index unknown FASTQ files        
+            
+            else if both index sequences of R1 and R2 are present in barcode list:
+                if the index sequences are identical:
+                    Increase counter of # of matched indexes by 1
+                    Write FASTQ records from R1 and R2 to two of 48 output files specific to that index pair (append index seqs to end of header separated by -)
+                if not identical:
+                    Increase counter of # of index hopping occurrences by 1
+                    Write FASTQ records from R1 and R2 to two output files for index hopping (append index seqs to end of header separated by -)
+
+All output files are closed after this point
+
+Calculate the percent of read-pairs per category
+ Number of read-pairs with properly matched indexes: # of matched indexes / total # of records
+ Number of read-pairs with unknown/low qual index occurrences: # of unknown indexes / total # of records
+ Number of read-pairs with index hopping occurrences: # of index hopping occurrences / total # of records
+
+Create/open a text file to print summary stats to named {base file name}.summary.txt
+    Print all stats above to file, newline separated
+    Output should look like:
+    
+    Summary Log for demultiplexing of following files:
+    Read 1 sequence: {name of file}
+    Read 1 indexes: {name of file}
+    Read 2 sequence: {name of file}
+    Read 2 indexes: {name of file}
+
+    Total number of read-pairs: {##}
+    Percent of read-pairs with properly matched indexes: {##%}
+    Percent of read-pairs with index hopping occurrences: {##%}
+    Percent of read-pairs with unknown index sequences or with average quality scores below {threshold}: {##%}
+
+
+# See test FASTQ files in test_files directory
+# test_explained.txt details out each edge case being tested along with expected output file names (6) and expected contents of each file
