@@ -3,7 +3,7 @@ Demultiplex multiple files from an Illumina paired-read dual-match sequencing ru
 Program should output 2 FASTQ files for each barcode (1 for each paired read) for all index-matched reads, 2 FASTQ files for reads with non-matching indices (evidence of index hopping), and 2 FASTQ files for reads with unknown indices and/or indices below a certain quality threshold.
 Given that there is a total of 24 barcodes, program should output a total of 52 files: 48 for index-matched reads, 2 for index hopped reads, and 2 for unknown/low quality index reads. 
 
-The program should also output some brief statistics in a separate text file to demonstrate what percentage of reads whose indices matched, did not match, and were unidentifiable/low quality.
+Program should also output some brief statistics in a separate text file to demonstrate what percentage of reads whose indices matched, did not match, and were unidentifiable/low quality.
 
 Sequencing files this program was designed for:
 1294_S1_L008_R1_001.fastq.gz # Read 1 sequence file

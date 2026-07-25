@@ -16,6 +16,7 @@
     3. **YOUR ANSWER HERE**
     
 ## Part 2
+**_Answers for all part 2 questions are within pseudocode file_**
 1. Define the problem
 2. Describe output
 3. Upload your [4 input FASTQ files](../TEST-input_FASTQ) and your [>=6 expected output FASTQ files](../TEST-output_FASTQ).
