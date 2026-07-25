@@ -103,7 +103,7 @@ Create/open a text file to print summary stats to named {base file name}.summary
     Print all stats above to file, newline separated
     Output should look like:
     
-    Summary Log for demultiplexing of following files:
+    Summary Log for demultiplexing of files:
     Read 1 sequence: {name of file}
     Read 1 indexes: {name of file}
     Read 2 sequence: {name of file}
@@ -114,6 +114,4 @@ Create/open a text file to print summary stats to named {base file name}.summary
     Percent of read-pairs with index hopping occurrences: {##%}
     Percent of read-pairs with unknown index sequences or with average quality scores below {threshold}: {##%}
 
-
-# See test FASTQ files in test_files directory
 # test_explained.txt details out each edge case being tested along with expected output file names (6) and expected contents of each file
