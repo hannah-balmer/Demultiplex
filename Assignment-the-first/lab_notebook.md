@@ -95,29 +95,67 @@ Start part 1 of Assignment the first
 
 ---
 
-### yyyy-mm-dd
+### 2026-07-29
  
 **Goal for today:**
- 
-**Steps performed:**
+Begin writing demultiplex.py code
 
+**Steps performed:**
+1. Isolated indexes in new text file
+2. Started demultiplex.py program
+
+    a. Wrote preliminary functions
  
 **Commands / scripts run:**
 ```bash
+grep -v "sample" indexes.txt | cut -f 5 > /scratch/bgmp/hbalmer/index_only.txt
+
+``` 
+
+**Issues encountered:**
+Need to plan about how to keep a counter of all possible index combinations to be used in heatmap graph. Also reformatted dictionary to change key and value instances so that both input/ouput objects for my opened output files couls be stored under the relefvant barcode they belong to. Will make my life easier when referring to the correct file to write to later in my script.
+ 
+**Time spent:**
+3 hours
 
 
+
+### 2026-07-30
+ 
+**Goal for today:**
+
+Finish part 1 of Assignment the first
+
+**Steps performed:**
+1. Tested qc_dist.py code on test files
+2. Run qc_dist.py on real files to generate histograms
+ 
+**Commands / scripts run:**
+```bash
+/usr/bin/time -v ./qc_dist.py # see dist_run.sh script
+
+# checked that the program ran through all lines in each file using a line counter, output is below
+Read1 sequence complete, number of lines: 1452986940
+Read1 indexes complete, number of lines: 1452986940
+Read2 indexes complete, number of lines: 1452986940
+Read2 sequence complete, number of lines: 1452986940
 ``` 
  
 **Results / Output:**
+Four histograms plotted
+
+Elapsed (wall clock) time (h:mm:ss or m:ss): 1:45:48
+Percent of CPU this job got: 99%
+Maximum resident set size (kbytes): 81252
 
 
 **Issues encountered:**
+When making multiple plots in one script run, need to clear out matplotlib cache by writing plt.clf() after every plot has been saved. All my plots after my first one were overlaying onto each other with different colored bars which I didn't want.
 
- 
 **Next steps:**
  
 **Time spent:**
-
+1 hour
  
 ## Pipeline / Workflow Summary
  

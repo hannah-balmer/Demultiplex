@@ -5,15 +5,22 @@
 
 | File name | label | Read length | Phred encoding |
 |---|---|---|---|
-| 1294_S1_L008_R1_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R2_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R3_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R4_001.fastq.gz |  |  |  |
+| 1294_S1_L008_R1_001.fastq.gz | read1 | 101 | +33 |
+| 1294_S1_L008_R2_001.fastq.gz | index1  | 8 | +33 |
+| 1294_S1_L008_R3_001.fastq.gz | read2 | 8 | +33 |
+| 1294_S1_L008_R4_001.fastq.gz | index2 | 101 | +33 |
+```
+zcat 1294_S1_L008_R1_001.fastq.gz | head -2 | tail -1 | wc
+102 # length is 101 since wc counts newline
+
+zcat 1294_S1_L008_R2_001.fastq.gz | head -2 | tail -1 | wc
+9 # length is 8 since wc counts newline
+```
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
-    2. **YOUR ANSWER HERE**
-    3. **YOUR ANSWER HERE**
+    2. **good quality score cutoff for index and bio reads**
+    3. **how many index lines have N's in them**
     
 ## Part 2
 **_Answers for all part 2 questions are within pseudocode file_**
