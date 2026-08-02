@@ -18,9 +18,17 @@ zcat 1294_S1_L008_R2_001.fastq.gz | head -2 | tail -1 | wc
 ```
 
 2. Per-base NT distribution
-    1. Use markdown to insert your 4 histograms here.
-    2. **good quality score cutoff for index and bio reads**
-    3. **how many index lines have N's in them**
+    1. [Read 1 sequence histogram](./read1_seq_dist.png)
+    [Read 1 index histogram](./read1_index_dist.png)
+    [Read 2 sequence histogram](./read2_seq_dist.png)
+    [Read 2 index histogram](./read2_index_dist.png)
+    2. Based off my histograms, I think 35 would be a good minimum threshold of average quality score for the biological reads since most read positions have average quality scores in the latter 30s. Since the index reads are shorter and their accuracy is critical for identifying the origin of a read, I think their average quality score threshold should be a bit higher. I propose a threshold of 37 for index reads and 35 for bio reads.
+    3. R2 had 3,976,613 index reads with N's in them. R3 had 3,328,051 index reads with N's in them.
+```
+zcat 1294_S1_L008_R2_001.fastq.gz | sed -n '2~4p' | awk '$0~"N" {N_sum+=1} END {print N_sum}'
+
+zcat 1294_S1_L008_R3_001.fastq.gz | sed -n '2~4p' | awk '$0~"N" {N_sum+=1} END {print N_sum}'
+```
     
 ## Part 2
 **_Answers for all part 2 questions are within pseudocode file_**
