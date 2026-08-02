@@ -6,10 +6,26 @@
 # 1294_S1_L008_R3_001.fastq.gz # Read 2 index file
 # 1294_S1_L008_R4_001.fastq.gz # Read 2 sequence file
 
-# dir = "/projects/bgmp/shared/2017_sequencing/"
+#dir = "/projects/bgmp/shared/2017_sequencing/"
 
 import bioinfo
 import matplotlib.pyplot as plt
+import gzip
+import argparse
+
+def get_args():
+    parser = argparse.ArgumentParser(description="A program that calculates sequence quality distribution by position across records in a FASTQ file")
+    parser.add_argument("-d", "--directory", help="Absolute file path to directory of sequencing file", type=str)
+    parser.add_argument("-f", "--file", help="File path name of input sequencing file", type=str)
+    parser.add_argument("-l", "--seq_read_length", help="Read length of sequence in file", type=int)
+
+    return parser.parse_args()
+
+args = get_args()
+dir = args.directory
+in_file = args.file
+ln = args.seq_read_length
+
 
 def init_list(lst: list, value: float=0.0, list_len: int=101) -> list:
     '''This function takes an empty list and will populate it list_len times with
@@ -29,7 +45,7 @@ def qc_dists(file: str, read_len: int=101) -> tuple:
     q_list = init_list(q_list, 0.0, read_len)
     
     lines: int = 0
-    with open(file, "r") as fq:
+    with gzip.open(file, "rt") as fq:
         for ind, line in enumerate(fq):
             lines += 1
             if ind%4 == 3:
@@ -42,41 +58,12 @@ def qc_dists(file: str, read_len: int=101) -> tuple:
     return (q_list, lines)
 
 
-read1_list, r1_lines = qc_dists("./r1_seq_test.fq", 101)
-index1_list, i1_lines = qc_dists("./r1_index_test.fq", 8)
-read2_list, r2_lines = qc_dists("./r2_seq_test.fq", 101)
-index2_list, i2_lines = qc_dists("./r2_index_test.fq", 8)
+read_list, num_lines = qc_dists(f'{dir}/{in_file}', ln)
+print(f"Sequence complete, total number of lines in file: {num_lines}")
 
 
-# read1_list, num_lines = qc_dists(f"{dir}1294_S1_L008_R1_001.fastq.gz", 101)
-# index1_list, num_lines = qc_dists(f"{dir}1294_S1_L008_R2_001.fastq.gz", 8)
-# read2_list, num_lines = qc_dists(f"{dir}1294_S1_L008_R3_001.fastq.gz", 8)
-# index2_list, num_lines = qc_dists(f"{dir}1294_S1_L008_R4_001.fastq.gz", 101)
-
-plt.bar(range(101), read1_list)
-plt.title("Average Quality Score by Position Across All Records in Read1 Sequence")
+plt.bar(range(ln), read_list)
+plt.title(f'Average Quality Score by Position Across All Records in {in_file}')
 plt.xlabel("Sequence Position")
 plt.ylabel("Average Quality Score")
-plt.savefig("read1_seq_dist.png")
-plt.clf()
-
-plt.bar(range(8), index1_list)
-plt.title("Average Quality Score by Position Across All Records in Read1 Indexes")
-plt.xlabel("Sequence Position")
-plt.ylabel("Average Quality Score")
-plt.savefig("read1_index_dist.png")
-plt.clf()
-
-plt.bar(range(101), read2_list)
-plt.title("Average Quality Score by Position Across All Records in Read2 Sequences")
-plt.xlabel("Sequence Position")
-plt.ylabel("Average Quality Score")
-plt.savefig("read2_seq_dist.png")
-plt.clf()
-
-plt.bar(range(8), index2_list)
-plt.title("Average Quality Score by Position Across All Records in Read2 Indexes")
-plt.xlabel("Sequence Position")
-plt.ylabel("Average Quality Score")
-plt.savefig("read2_index_dist.png")
-plt.clf()
+plt.savefig(f'{in_file}_dist.png')

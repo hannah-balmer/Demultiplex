@@ -18,10 +18,10 @@ zcat 1294_S1_L008_R2_001.fastq.gz | head -2 | tail -1 | wc
 ```
 
 2. Per-base NT distribution
-    1. [Read 1 sequence histogram](./read1_seq_dist.png)
-    [Read 1 index histogram](./read1_index_dist.png)
-    [Read 2 sequence histogram](./read2_seq_dist.png)
-    [Read 2 index histogram](./read2_index_dist.png)
+    1. [Read 1 sequence histogram](./1294_S1_L008_R1_001.fastq.gz_dist.png)
+    [Read 1 index histogram](./1294_S1_L008_R2_001.fastq.gz_dist.png)
+    [Read 2 sequence histogram](./1294_S1_L008_R4_001.fastq.gz_dist.png)
+    [Read 2 index histogram](./1294_S1_L008_R3_001.fastq.gz_dist.png)
     2. Based off my histograms, I think 35 would be a good minimum threshold of average quality score for the biological reads since most read positions have average quality scores in the latter 30s. Since the index reads are shorter and their accuracy is critical for identifying the origin of a read, I think their average quality score threshold should be a bit higher. I propose a threshold of 37 for index reads and 35 for bio reads.
     3. R2 had 3,976,613 index reads with N's in them. R3 had 3,328,051 index reads with N's in them.
 ```
