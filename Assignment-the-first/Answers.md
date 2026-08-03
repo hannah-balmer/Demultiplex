@@ -1,7 +1,11 @@
 # Assignment the First
 
 ## Part 1
-1. Be sure to upload your Python script. Provide a link to it here: [Quality score distribution python script](./qc_dist_args.py) [shell script for running all four distributions](./dist_run.sh)
+1. Be sure to upload your Python script. Provide a link to it here: 
+
+[Quality score distribution python script](./qc_dist_args.py)
+
+[Shell script for running all four distributions](./dist_run.sh)
 
 | File name | label | Read length | Phred encoding |
 |---|---|---|---|
