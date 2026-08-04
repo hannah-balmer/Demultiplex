@@ -16,6 +16,7 @@ __version__ = "0.4"         # Read way more about versioning here:
 
 DNA_bases = set('ATGCNatcgn')
 RNA_bases = set('AUGCNaucgn')
+comp_dict = {'A': 'T', 'T':'A', 'C':'G', 'G':'C', 'N':'N'}
 
 def convert_phred(letter: str) -> int:
     '''Converts a single character into a phred score as an integer'''
@@ -69,6 +70,13 @@ def oneline_fasta(fafile: str):
                 newfa.write(f"\n{line}")
             else:
                 newfa.write(f"{line.strip()}")
+
+def rev_comp(seq: str) -> str:
+    seqr = seq[::-1].upper()
+    seqrc = '' 
+    for b in seqr:
+        seqrc += comp_dict[b] 
+    return seqrc
 
 
 if __name__ == "__main__":
